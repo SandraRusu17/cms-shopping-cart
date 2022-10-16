@@ -1,9 +1,12 @@
 package com.myshop.cmsshoppingcart.models.data;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "pages")
+@Data
 public class Page {
 
     @Id
