@@ -25,11 +25,11 @@
                 <td><a th:href="@{'/admin/pages/edit/' + ${page.id}}">Edit</a></td>
                 <td><a th:href="@{'/admin/pages/delete/' + ${page.id}}">Delete</a></td>
             </tr>
-
         </table>
     </div>
 
     <div th:unless="${!pages.empty}">
+        <p>There are NO pages</p>
         <h4 class="display-4">There are no pages at the moment</h4>
     </div>
 </div>
