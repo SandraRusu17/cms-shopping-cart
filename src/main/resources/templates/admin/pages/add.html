@@ -30,7 +30,7 @@
 
         <div class="form-group">
             <label>Content</label>
-            <textarea th:fields="*{content}" rows="10" class="form-control" placeholder="Content"></textarea>
+            <textarea th:field="*{content}" rows="10" class="form-control" placeholder="Content"></textarea>
             <span class="error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></span>
         </div>
 

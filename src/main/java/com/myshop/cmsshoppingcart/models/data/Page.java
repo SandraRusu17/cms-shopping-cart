@@ -19,7 +19,7 @@ public class Page {
 
     private String slug;
 
-    @Size(min = 10, message = "The content is too short" )
+    @Size(min = 5, message = "The content is too short" )
     private String content;
 
     private int sorting;
