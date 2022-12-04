@@ -50,6 +50,7 @@ public class AdminController {
         if (slugExists != null) {
             redirectAttributes.addFlashAttribute("message", "Slug exists, choose another");
             redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+            redirectAttributes.addFlashAttribute("page",page);
         } else {
             page.setSlug(slug);
             page.setSorting(100);
