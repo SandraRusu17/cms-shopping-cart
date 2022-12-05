@@ -5,14 +5,12 @@ import com.myshop.cmsshoppingcart.models.data.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin/pages")
@@ -58,6 +56,16 @@ public class AdminController {
             pageRepository.save(page);
         }
         return "redirect:/admin/pages/add";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable int id, Model model) {
+        Optional<Page> page = pageRepository.findById(id);
+
+        model.addAttribute("page", page.get());
+
+        return "admin/pages/edit";
+
     }
 
 }
