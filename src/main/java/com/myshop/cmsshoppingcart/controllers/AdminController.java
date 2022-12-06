@@ -68,4 +68,33 @@ public class AdminController {
 
     }
 
+
+    @PostMapping("/edit")
+    public String edit(@Valid Page page, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+
+        Optional<Page> pageCurrent = pageRepository.findById(page.getId());
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("pageTitle", pageCurrent.get().getTitle());
+            return "admin/pages/edit";
+        }
+        redirectAttributes.addFlashAttribute("message", "Page edited");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+
+        String slug = page.getSlug() == "" ? page.getTitle().toLowerCase().replace(" ", "-") : page.getSlug().toLowerCase().replace(" ", "-");
+
+        Page slugExists = pageRepository.findBySlugAndIdNot(slug, page.getId());
+
+        if (slugExists != null) {
+            redirectAttributes.addFlashAttribute("message", "Slug exists, choose another");
+            redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+            redirectAttributes.addFlashAttribute("page",page);
+        } else {
+            page.setSlug(slug);
+            page.setSorting(100);
+
+            pageRepository.save(page);
+        }
+        return "redirect:/admin/pages/edit/" + page.getId();
+    }
+
 }
