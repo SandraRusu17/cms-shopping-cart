@@ -65,7 +65,6 @@ public class AdminController {
         model.addAttribute("page", page.get());
 
         return "admin/pages/edit";
-
     }
 
 
@@ -95,6 +94,17 @@ public class AdminController {
             pageRepository.save(page);
         }
         return "redirect:/admin/pages/edit/" + page.getId();
+    }
+
+    @GetMapping("/delete/{id}")
+    public String edit(@PathVariable int id, RedirectAttributes redirectAttributes) {
+
+        pageRepository.deleteById(id);
+
+        redirectAttributes.addFlashAttribute("message", "Page deleted");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+
+        return "redirect:/admin/pages";
     }
 
 }
