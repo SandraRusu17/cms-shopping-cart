@@ -24,7 +24,7 @@ public class AdminController {
 
     @GetMapping
     public String index(Model model) {
-        List<Page> pages = pageRepository.findAll();
+        List<Page> pages = pageRepository.findAllByOrderBySortingAsc();
         model.addAttribute("pages", pages);
         return "admin/pages/index";
     }
@@ -105,6 +105,21 @@ public class AdminController {
         redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 
         return "redirect:/admin/pages";
+    }
+
+    @PostMapping("/reorder")
+    public @ResponseBody String reorder(@RequestParam("id[]") int[] id) {
+        int count = 1;
+        Page page;
+
+        for (int pageId: id) {
+            page = pageRepository.getOne(pageId);
+            page.setSorting(count);
+            pageRepository.save(page);
+            count++;
+        }
+
+        return "ok";
     }
 
 }
