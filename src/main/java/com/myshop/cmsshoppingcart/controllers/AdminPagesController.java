@@ -14,11 +14,11 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin/pages")
-public class AdminController {
+public class AdminPagesController {
 
     PageRepository pageRepository;
 
-    public AdminController(PageRepository pageRepository) {
+    public AdminPagesController(PageRepository pageRepository) {
         this.pageRepository = pageRepository;
     }
 
