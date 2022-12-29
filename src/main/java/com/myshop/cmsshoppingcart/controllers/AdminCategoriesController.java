@@ -25,7 +25,7 @@ public class AdminCategoriesController {
 
     @GetMapping
     public String index(Model model){
-        List<Category>  categories = categoryRepository.findAll();
+        List<Category>  categories = categoryRepository.findAllByOrderBySortingAsc();
 
         model.addAttribute("categories", categories);
 
@@ -109,5 +109,20 @@ public class AdminCategoriesController {
         redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 
         return "redirect:/admin/categories";
+    }
+
+    @PostMapping("/reorder")
+    public @ResponseBody String reorder(@RequestParam("id[]") int[] id) {
+        int count = 1;
+        Category category;
+
+        for (int categoryId: id) {
+            category = categoryRepository.getOne(categoryId);
+            category.setSorting(count);
+            categoryRepository.save(category);
+            count++;
+        }
+
+        return "ok";
     }
 }
