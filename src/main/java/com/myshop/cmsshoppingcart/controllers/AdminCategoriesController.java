@@ -2,7 +2,7 @@ package com.myshop.cmsshoppingcart.controllers;
 
 import com.myshop.cmsshoppingcart.models.CategoryRepository;
 import com.myshop.cmsshoppingcart.models.data.Category;
-import com.myshop.cmsshoppingcart.models.data.Page;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,13 +15,10 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin/categories")
+@RequiredArgsConstructor
 public class AdminCategoriesController {
 
-    private CategoryRepository categoryRepository;
-
-    public AdminCategoriesController(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
+    private final CategoryRepository categoryRepository;
 
     @GetMapping
     public String index(Model model){

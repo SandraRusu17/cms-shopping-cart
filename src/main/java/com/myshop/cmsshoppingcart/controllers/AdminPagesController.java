@@ -2,6 +2,7 @@ package com.myshop.cmsshoppingcart.controllers;
 
 import com.myshop.cmsshoppingcart.models.PageRepository;
 import com.myshop.cmsshoppingcart.models.data.Page;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,13 +15,10 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin/pages")
+@RequiredArgsConstructor
 public class AdminPagesController {
 
-    PageRepository pageRepository;
-
-    public AdminPagesController(PageRepository pageRepository) {
-        this.pageRepository = pageRepository;
-    }
+    private final PageRepository pageRepository;
 
     @GetMapping
     public String index(Model model) {
