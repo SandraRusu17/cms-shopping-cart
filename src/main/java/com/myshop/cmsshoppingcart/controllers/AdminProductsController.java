@@ -54,8 +54,11 @@ public class AdminProductsController {
                       RedirectAttributes redirectAttributes,
                       Model model) throws IOException {
 
+        List<Category> categories = categoryRepository.findAll();
+
         if (bindingResult.hasErrors()) {
-            return "admin/categories/add";
+            model.addAttribute("categories", categories);
+            return "admin/products/add";
         }
 
         boolean fileOK = false;
@@ -77,6 +80,7 @@ public class AdminProductsController {
         if (!fileOK) {
             redirectAttributes.addFlashAttribute("message", "Slug exists, choose another");
             redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+            redirectAttributes.addFlashAttribute("product", product);
         } else if (productExists != null) {
             redirectAttributes.addFlashAttribute("message", "Product exists, choose another");
             redirectAttributes.addFlashAttribute("alertClass", "alert-danger");

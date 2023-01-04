@@ -1,7 +1,6 @@
 package com.myshop.cmsshoppingcart.models;
 
 import com.myshop.cmsshoppingcart.models.data.Category;
-import com.myshop.cmsshoppingcart.models.data.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
