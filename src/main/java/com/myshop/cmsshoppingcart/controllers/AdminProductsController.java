@@ -39,7 +39,7 @@ public class AdminProductsController {
         List<Category> categories = categoryRepository.findAll();
 
         HashMap<Integer, String> cats = new HashMap<>();
-        for(Category category: categories){
+        for (Category category : categories) {
             cats.put(category.getId(), category.getName());
         }
 
@@ -116,6 +116,69 @@ public class AdminProductsController {
 
 
         return "admin/products/edit";
+    }
+
+    @PostMapping("/edit")
+    public String edit(@Valid Product product,
+                       BindingResult bindingResult,
+                       MultipartFile file,
+                       RedirectAttributes redirectAttributes,
+                       Model model) throws IOException {
+
+        Optional<Product> currentProduct = productRepository.findById(product.getId());
+
+        List<Category> categories = categoryRepository.findAll();
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("productName", currentProduct.get().getName());
+            model.addAttribute("categories", categories);
+            return "admin/products/edit";
+        }
+
+        boolean fileOK = false;
+        byte[] bytes = file.getBytes();
+        String filename = file.getOriginalFilename();
+        Path path = Paths.get("src/main/resources/static/media/" + filename);
+
+        if (!file.isEmpty()) {
+            if (filename.endsWith("jpg") || filename.endsWith("png")) {
+                fileOK = true;
+            }
+        } else {
+            fileOK = true;
+        }
+
+        redirectAttributes.addFlashAttribute("message", "Product edited");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+
+        String slug = product.getName().toLowerCase().replace(" ", "-");
+
+        Product productExists = productRepository.findBySlugAndIdNot(slug, product.getId());
+
+        if (!fileOK) {
+            redirectAttributes.addFlashAttribute("message", "Slug exists, choose another");
+            redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+            redirectAttributes.addFlashAttribute("product", product);
+        } else if (productExists != null) {
+            redirectAttributes.addFlashAttribute("message", "Product exists, choose another");
+            redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+            redirectAttributes.addFlashAttribute("product", product);
+        } else {
+            product.setSlug(slug);
+
+            if (!file.isEmpty()) {
+                Path path2 = Paths.get("src/main/resources/static/media/" + currentProduct.get().getImage());
+                Files.delete(path2);
+                product.setImage(filename);
+                Files.write(path, bytes);
+            } else {
+                product.setImage(currentProduct.get().getImage());
+            }
+
+            productRepository.save(product);
+
+        }
+        return "redirect:/admin/products/edit/" + product.getId();
     }
 
 }
