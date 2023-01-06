@@ -181,4 +181,20 @@ public class AdminProductsController {
         return "redirect:/admin/products/edit/" + product.getId();
     }
 
+    @GetMapping("/delete/{id}")
+    public String del(@PathVariable int id, RedirectAttributes redirectAttributes) throws IOException {
+
+        Optional<Product> product = productRepository.findById(id);
+        Optional<Product> currentProduct = productRepository.findById(product.get().getId());
+
+        Path path2 = Paths.get("src/main/resources/static/media/" + currentProduct.get().getImage());
+        Files.delete(path2);
+        productRepository.deleteById(id);
+
+        redirectAttributes.addFlashAttribute("message", "Product deleted");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+
+        return "redirect:/admin/products";
+    }
+
 }
