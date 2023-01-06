@@ -35,7 +35,7 @@ public class AdminProductsController {
     @GetMapping
     public String index(Model model, @RequestParam(value = "page", required = false) Integer p) {
 
-        int perPage = 6;
+        int perPage = 3;
         int page = (p != null) ? p : 0;
 
         Pageable pageable = PageRequest.of(page, perPage);
