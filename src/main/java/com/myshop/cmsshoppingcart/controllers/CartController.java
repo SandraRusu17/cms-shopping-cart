@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Optional;
@@ -66,10 +67,33 @@ public class CartController {
         return "cart_view";
     }
 
+    @GetMapping("/subtract/{id}")
+    public String subtract(@PathVariable int id, HttpSession session, Model model, HttpServletRequest httpServletRequest) {
+
+        Optional<Product> product = productRepository.findById(id);
+
+        HashMap<Integer, Cart> cart = (HashMap<Integer, Cart>) session.getAttribute("cart");
+
+        int qty = cart.get(id).getQuantity();
+        if (qty == 1) {
+            cart.remove(id);
+            if (cart.size() == 0) {
+                session.removeAttribute("cart");
+            }
+        } else {
+            cart.put(id, new Cart(id, product.get().getName(), product.get().getPrice(), --qty, product.get().getImage()));
+        }
+
+        String refererLink = httpServletRequest.getHeader("referer");
+
+        return "redirect:" + refererLink;
+
+    }
+
     @RequestMapping("/view")
     public String view(HttpSession session, Model model) {
 
-        if(session.getAttribute("cart") == null) {
+        if (session.getAttribute("cart") == null) {
             return "redirect:/";
         }
 
