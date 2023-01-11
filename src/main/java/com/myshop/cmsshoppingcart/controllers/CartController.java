@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -22,7 +23,10 @@ public class CartController {
     private ProductRepository productRepository;
 
     @GetMapping("/add/{id}")
-    public String add(@PathVariable int id, HttpSession session, Model model) {
+    public String add(@PathVariable int id,
+                      HttpSession session,
+                      Model model,
+                      @RequestParam(value = "cartPage", required = false) String cartPage) {
 
         Optional<Product> product = productRepository.findById(id);
 
@@ -55,7 +59,24 @@ public class CartController {
         model.addAttribute("size", size);
         model.addAttribute("total", total);
 
+        if (cartPage != null) {
+            return "redirect:/cart/view";
+        }
 
         return "cart_view";
+    }
+
+    @RequestMapping("/view")
+    public String view(HttpSession session, Model model) {
+
+        if(session.getAttribute("cart") == null) {
+            return "redirect:/";
+        }
+
+        HashMap<Integer, Cart> cart = (HashMap<Integer, Cart>) session.getAttribute("cart");
+        model.addAttribute("cart", cart);
+        model.addAttribute("notCartViewPage", true);
+
+        return "cart";
     }
 }
