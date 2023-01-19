@@ -103,4 +103,30 @@ public class CartController {
 
         return "cart";
     }
+
+    @GetMapping("/remove/{id}")
+    public String remove(@PathVariable int id, HttpSession session, Model model, HttpServletRequest httpServletRequest) {
+
+        HashMap<Integer, Cart> cart = (HashMap<Integer, Cart>) session.getAttribute("cart");
+
+        cart.remove(id);
+        if (cart.size() == 0) {
+            session.removeAttribute("cart");
+        }
+
+        String refererLink = httpServletRequest.getHeader("referer");
+
+        return "redirect:" + refererLink;
+    }
+
+    @GetMapping("/clear")
+    public String clear(HttpSession session, HttpServletRequest httpServletRequest) {
+
+        session.removeAttribute("cart");
+
+        String refererLink = httpServletRequest.getHeader("referer");
+
+        return "redirect:" + refererLink;
+    }
+
 }
