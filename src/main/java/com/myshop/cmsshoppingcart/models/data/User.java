@@ -25,7 +25,7 @@ public class User implements UserDetails {
     @Size(min = 2, message = "Username must be at least 2 characters long")
     private String username;
 
-    @Size(min = 4, message = "Password must be at least 2 characters long")
+    @Size(min = 4, message = "Password must be at least 4 characters long")
     private String password;
 
     @Transient
