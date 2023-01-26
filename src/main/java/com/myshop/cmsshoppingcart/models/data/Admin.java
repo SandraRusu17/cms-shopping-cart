@@ -6,7 +6,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,13 +29,6 @@ public class Admin implements UserDetails {
 
     @Transient
     private String confirmPassword;
-
-    @Email(message = "Please enter a valid email")
-    private String email;
-
-    @Column(name = "phone_number")
-    @Size(min = 6, message = "Phone number must be at least 6 characters long")
-    private String phoneNumber;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
